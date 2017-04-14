@@ -1,0 +1,130 @@
+#!/bin/sh
+# chkconfig: 2345 80 20
+# description: mpin rpa go start/stop script
+# processname: mpin-rpa-go
+#
+# Instalation:
+# copy file to /etc/init.d
+# chmod +x /etc/init.d/mpin-rpa-go
+# chkconfig --add /etc/init.d/mpin-rpa-go
+# chkconfig mpin-rpa-go on
+#
+# Usage: (as root)
+# service mpin-rpa-go start
+# service mpin-rpa-go stop
+# service mpin-rpa-go restart
+
+## RPA 
+BINARY_PATH="/usr/local/mpin/new-mpin-rpa-go/new-mpin-rpa-go.linux"
+
+## RPA option
+EMAIL_SENDER=""
+EMAIL_SUBJECT="M-Pin demo: New user activation"
+FORCE_ACTIVATE=False
+RPA_PORT=8005
+RPS_HOST="127.0.0.1:8011"
+RPS_SCHEMA="http"
+SECURE_COOKIE=False
+SMTP_PASSWORD=""
+SMTP_PORT=25
+SMTP_SERVER=""
+SMTP_USE_TLS=False
+SMTP_USER=""
+VERIFY_URL="http://localhost:8005/mpinActivate"
+
+## Log output
+STDOUT_PATH="/usr/local/mpin/rpa-go.out"
+
+# rpa go running option
+OPTIONS=""
+if [ -n "$EMAIL_SENDER" ]; then
+    OPTIONS="${OPTIONS} -email-sender \"${EMAIL_SENDER}\""
+fi
+if [ -n "$EMAIL_SUBJECT" ]; then
+    OPTIONS="${OPTIONS} -email-subject \"${EMAIL_SUBJECT}\""
+fi
+if [ $FORCE_ACTIVATE = "True" ]; then
+    OPTIONS="${OPTIONS} -force-activate"
+fi
+if [ -n "$RPA_PORT" ]; then
+    OPTIONS="${OPTIONS} -port ${RPA_PORT}"
+fi
+if [ -n "$RPS_HOST" ]; then
+    OPTIONS="${OPTIONS} -rps-host  ${RPS_HOST}"
+fi
+if [ -n "$RPS_SCHEMA" ]; then
+    OPTIONS="${OPTIONS} -rps-schema  ${RPS_SCHEMA}"
+fi
+if [ $SECURE_COOKIE = "True" ]; then
+    OPTIONS="${OPTIONS} -secure-cookie"
+fi
+if [ -n "$SMTP_PASSWORD" ]; then
+    OPTIONS="${OPTIONS} -smtp-password  ${SMTP_PASSWORD}"
+fi
+if [ -n "$SMTP_PORT" ]; then
+    OPTIONS="${OPTIONS} -smtp-port ${SMTP_PORT}"
+fi
+if [ -n "$SMTP_SERVER" ]; then
+    OPTIONS="${OPTIONS} -smtp-server  ${SMTP_SERVER}"
+fi
+if [ $SMTP_USE_TLS = "True" ]; then
+    OPTIONS="${OPTIONS} -smtp-use-tls"
+fi
+if [ -n "$SMTP_USER" ]; then
+    OPTIONS="${OPTIONS} -smtp-user  ${SMTP_USER}"
+fi
+if [ -n "$VERIFY_URL" ]; then
+    OPTIONS="${OPTIONS} -verify-identity-url  ${VERIFY_URL}"
+fi
+
+# User running the Play process
+USER="ansible"
+
+# source function library
+. /etc/init.d/functions
+RETVAL=0
+
+start() {
+        echo -n "Starting RPA service: "
+        su -s /bin/sh $USER -c "nohup $BINARY_PATH $OPTIONS > $STDOUT_PATH 2>&1 &"
+        RETVAL=$?
+
+        if [ $RETVAL -eq 0 ]; then
+                echo_success
+        else
+                echo_failure
+        fi
+        echo
+}
+stop() {
+        echo -n "Shutting down RPA service: "
+        RETVAL=$?
+        pids=$(ps aux | grep new-mpin-rpa-go | grep -vw grep | awk '{ print $2 }')
+        for pid in ${pids[*]}
+        do
+                kill -9 ${pid}
+        done
+        RETVAL=$?
+        if [ $RETVAL -eq 0 ]; then
+                echo_success
+        else
+                echo_failure
+        fi
+        echo
+}
+case "$1" in
+        start)
+        start
+        ;;
+        stop)
+        stop
+        ;;
+        restart|reload)
+        stop
+        sleep 10
+        start
+        ;;
+        *)
+        echo "Usage: $0 {start|stop|restart}"
+esac
+exit 0

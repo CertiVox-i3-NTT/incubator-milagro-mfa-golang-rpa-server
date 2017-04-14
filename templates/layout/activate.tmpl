@@ -1,0 +1,44 @@
+{{ define "style" }}
+    <style>
+    .button,
+    button,
+    input[type="submit"],
+    input[type="reset"],
+    input[type="button"] {
+        font-size: 15px;
+    }
+    </style>
+{{ end }}
+{{ define "content" }}
+
+                <h1>Identity activation</h1>
+                {{ if not .IsValid }}
+                <p class="center">Cannot validate your identity! Reason:
+                    <label class="error">{{ .ErrorMessage}}</label>
+                </p>
+                {{ else if .Activated }}
+                <div class="one column center">
+                    <p>Your identity has been activated</p>
+                    <p>You can now close this window and go back to complete your sign in procedure</p>
+                </div>
+                {{ else }}
+                <p class="center">Please confirm your M-Pin activation:</p>
+                <!--action box start-->
+                <div class="one column center grey marBot20 marTop20">
+                    <p>Email address:
+                        <label style="color:black"> {{ .UserID}}</label>
+                    </p>
+                    <p>Requested on:
+                        <label id="issued" style="color:black">{{ .HumanIssued }}</label>
+                    </p>
+                    <p>From:
+                        <label style="color:black">{{ .DeviceName }}</label>
+                    </p>
+                    <form method="POST">
+                        <button type="submit">Confirm and activate</button>
+                        <button onclick="window.location = '/'; return false;">Cancel activation</button>
+                    </form>
+                </div>
+                <!--action box end-->
+                {{ end }}
+{{ end }}

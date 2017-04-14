@@ -1,0 +1,15 @@
+{{ define "base" }}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>M-Pin demo</title>
+{{ template "scripts" . }}
+{{ template "style" . }}
+</head>
+<body>
+<div class="loggedInStatus">You are logged in as: {{ .User }} | <a href="/logout"> Log Out </a></div>
+{{ template "content" . }}
+</body>
+</html>
+{{ end }}
+{{ define "scripts" }}{{ end }}
+{{ define "style" }}{{ end }}

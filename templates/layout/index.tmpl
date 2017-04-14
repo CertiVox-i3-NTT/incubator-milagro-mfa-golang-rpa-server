@@ -1,0 +1,46 @@
+{{ define "scripts" }}
+    <script type="text/javascript" src="{{ .MpinJSURL }}"></script>
+    <script type="text/javascript">
+        var mobileURL = "{{ .MobileAppFullURL }}";
+        if (mobileURL.slice(0,1) == "/"){
+            mobileURL = document.location.protocol + "//" + document.location.host +  "{{ .MobileAppFullURL }}";
+        }
+        new mpin({
+            targetElement: "pinHolder",
+
+            clientSettingsURL: "{{ .ClientSettingsURL  }}",
+            mobileAppFullURL: mobileURL,
+
+            successLoginURL: "/protected",
+
+            onSuccessSetup: function(authData, onSuccess) {
+                console.log("Setup PIN successful")
+                console.log(authData)
+                onSuccess()
+            },
+
+            onSuccessLogin: function(authData) {
+                window.location = "/protected"
+            },
+
+            onReactivate: function(userId) {
+                window.location = "/new?userId=" + userId;
+            },
+
+            onUnsupportedBrowser: function() {
+                window.location = "http://info.certivox.com/browser-compatibility"
+            },
+
+            onVerifySuccess: function(data) {},
+        });
+    </script>
+    {{ template "ajax" . }}
+{{ end }}
+{{ define "content" }}
+                <h1>Welcome to the M-Pin System Demo</h1>
+                <div class="one column center">
+                    <div id="pinHolder" style="margin:auto; width:260px;">
+                        Loading PinPad...
+                    </div>
+                </div>
+{{ end }}

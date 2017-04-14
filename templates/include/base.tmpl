@@ -1,0 +1,52 @@
+{{ define "base" }}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>M-Pin demo</title>
+        <link href="{{ .StaticURLBase }}css/certivox.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="{{ .StaticURLBase }}images/favicon.ico">
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+        {{ template "scripts" . }}
+        {{ template "style" . }}
+     </head>
+
+    <body>
+        <div id="header">
+            <div class="container">
+                <a href="http://certivox.com" target="_blank" class="logo1">
+                <img src="{{ .StaticURLBase }}images/miracl.svg" alt="MIRACL Logo" width="179" height="57" title="CertiVox Logo" style="border-style: none"></a>
+                <a href="http://www.certivox.com/m-pin/" , target="_blank" class="logo2">
+                <img alt="M-Pin strong authentication logo" src="{{ .StaticURLBase }}images/m-pin-miracl.svg" width="184" height="54" title="M-Pin strong authentication logo" style="border-style: none"></a>
+            </div>
+            <div class="clear"></div>
+        </div>
+        {{ if .User }}
+        <div id="loggedInHolder">
+            <div class="loggedInStatus">You are logged in as: {{ .User }} | <a href="/logout"> Log Out </a></div>
+        </div>
+        {{ end }}
+        <div id="content">
+            <div class="container">
+                <div class="nav">
+                    <ul>
+                        <li><a href="http://www.certivox.com" target="_blank">MIRACL Web Site</a></li>
+                        <li><a href="http://docs.certivox.com/" target="_blank">M-Pin Documentation</a></li>
+                        <li><a href="http://discuss.certivox.com" target="_blank">Community Support</a></li>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+                <div class="content">
+                {{ template "content" . }}
+                    <div class="clear"></div>
+                </div>
+                <div id="footer">&copy; 2015 MIRACL UK Limited, All Rights Reserved.</div>
+            </div>
+        </div>
+    </body>
+
+</html>
+{{ end }}
+{{ define "scripts" }}{{ end }}
+{{ define "style" }}{{ end }}

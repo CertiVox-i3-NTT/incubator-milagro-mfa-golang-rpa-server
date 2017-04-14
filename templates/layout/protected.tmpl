@@ -1,0 +1,35 @@
+{{ define "scripts" }}
+    <script type="text/javascript" src="{{ .MpinJSURL }}"></script>
+    {{ template "ajax" . }}
+{{ end }}
+{{ define "content" }}
+                {{ if .Welcome }}
+                <h1>{{ .User }}, you are now logged in!</h1>
+                {{ else }}
+                <h1>{{ .User }}</h1>
+                {{ end }}
+                {{ if .Welcome }}
+                <section>
+                    <div class="page-header section-header">
+                        <h1>Usernames and Passwords are history</h1>
+                        <div style="float:left;"><img width="501" height="344" style="float: right;" title="M-Pin authentication server, inherently more secure than usernames and passwords." src="{{ .StaticURLBase }}images/landing-page2.jpg" alt="M-Pin authentication server, inherently more secure than usernames and passwords."></div>
+                        <div class="clear"></div>
+                        <p class="secondary-header"><span class="section-subheader" id="hs_cos_wrapper_subheader">Security has evolved; the Future of Strong Authentication is here.</span></p>
+                        <div class="clear"></div>
+                    </div>
+                </section>
+                {{ else }}
+                <section class="center">
+                    <p>You see this page because you are logged in. <a href="/logout">Log out</a></p>
+                </section>
+                <section>
+                    <div class="page-header section-header">
+                        <h1>Usernames and Passwords are history</h1>
+                        <div style="float:left;"><img width="501" height="344" style="float: right;" title="M-Pin authentication server, inherently more secure than usernames and passwords." src="{{ .StaticURLBase }}images/landing-page2.jpg" alt="M-Pin authentication server, inherently more secure than usernames and passwords."></div>
+                        <div class="clear"></div>
+                        <p class="secondary-header"><span class="section-subheader" id="hs_cos_wrapper_subheader">Security has evolved; the Future of Strong Authentication is here.</span></p>
+                        <div class="clear"></div>
+                    </div>
+                </section>
+                {{ end }}
+{{ end }}
